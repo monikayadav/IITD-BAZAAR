@@ -1,0 +1,88 @@
+{{extend 'layout.html'}}
+
+
+<script type="text/javascript">
+window.onload=function(){
+	var elForm=document.getElementsByTagName('form')[0];
+	elForm.onsubmit=function()
+	{
+		var required=['NAME','PHONE_NUMBER','EMAIL_ID'];
+		var bool=true;
+		for(var i=0;i<required.length;i++)
+	    {
+    		if(document.getElementById(required[i]).value=="")
+			{
+					alert(required[i]+' is mandatry field!!');
+					bool=false;
+			}
+        }
+        if(bool==false)
+        {
+        	return bool;
+        }
+		else
+        {
+			insert_element();
+			bool=true;
+			return bool;
+		}
+	}
+
+	
+</script>	
+	
+	
+<body style="margin:40px 0 0 0;
+	background: #555 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAB9JREFUeNpi/P//PwM6YGLAAuCCmpqacC2MRGsHCDAA+fIHfeQbO8kAAAAASUVORK5CYII=);">
+	<div id="main_body">
+        <h1><center>FILL YOUR DETAILS TO PLACE ORDER:</center></h1>
+    <form action="" enctype="multipart/form-data" method="post">
+        <div><label>NAME<input type="text" id="ITEM_NAME"/></label> </div><br><br><br><br>
+        <div><label>PHONE_NO<input type="number"   maxlength="10"   id="PHONE_NUMBER"/></label></div><br><br><br>
+        <div><label>EMAIL_ID<input type="email"  id="EMAIL_ID"/></label></div> <br><br><br><br>
+          <div><label><button id="FormButton" onclick="insert_element()">SUBMIT</button></label></div>
+    <form/>
+    <div/>
+    <body/>
+    
+    <style>
+div#main_body{
+	height:1000px;
+	overflow:auto;
+	width:950px;
+	margin:15px 0 0 50px;
+	background: #A9A9A9
+}
+
+form {
+	margin: 1em;
+}
+
+form input {
+	width: 30em;
+	height: 2em;
+	margin: 0 0 0.5em;
+	background-color:white;
+}
+
+form label {
+	width: 10em;
+	height: 2.5em;
+	float: left;
+	color:black;
+	font-size:1.3em;
+	font-style:bold;
+}
+
+input#FormButton {
+	width: 8em;
+	height: 2.5em;
+	background-color:white;
+}
+
+.item_name {
+	width: 20em;
+	height: 2em;
+}
+</style>
+        <html/>

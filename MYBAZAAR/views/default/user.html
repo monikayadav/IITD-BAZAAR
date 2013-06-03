@@ -1,0 +1,30 @@
+{{extend 'layout.html'}}
+<h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
+<div id="main_body">
+<div id="web2py_user_form">
+{{
+if request.args(0)=='login':
+    
+pass
+=form
+}}
+</div></div>
+
+<style>
+body{
+    margin:40px 0 0 20px;
+	background: #ECF2F5 ;
+    font: 13px 'Lucida sans', Arial, Helvetica;
+    color: #01395F;
+    text-align: left;
+    }    
+    
+    div#main_body{
+	 	height:350px;
+		width:900px;
+		margin:0px 0 0 5px;
+      	background: #D1E8F8;
+        padding:10px 10px 10px 10px;
+      }
+    
+</style>

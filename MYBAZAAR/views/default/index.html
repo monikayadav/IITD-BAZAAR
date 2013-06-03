@@ -1,0 +1,1282 @@
+{{extend 'layout.html'}}
+    <script type="text/javascript">
+        //for main div
+function createMainDiv(){
+     var MainDivTag = document.createElement("div");
+     MainDivTag.id = "Maindiv";
+     document.getElementById("main_page").appendChild(MainDivTag);
+}
+ 
+        //for default message   
+function createDiv0(){
+	var divTag0 = document.createElement("div");
+    divTag0.id = "div0";
+    document.getElementById("Maindiv").appendChild(divTag0);
+	document.getElementById("div0").innerHTML="NO RESULT FOUND!!!";
+}
+    
+      //for image:
+function createDiv1(category){
+	var divTag1 = document.createElement("div");
+	divTag1.id = "div1";
+	switch(category)
+    {   case "BOOKS":divTag1.setAttribute("style","background:url('/MYBAZAAR/static/images/BOOKS.png')");
+        				break;
+        case "ELECTRONICS":divTag1.setAttribute("style","background:url('/MYBAZAAR/static/images/ELECTRONICS.png')");
+        				break;
+        case "VEHICLES":divTag1.setAttribute("style","background:url('/MYBAZAAR/static/images/VEHICLES.png')");
+        				break;
+        case "STUDY MATERIALS":divTag1.setAttribute("style","background:url('/MYBAZAAR/static/images/STUDY.png')");
+        				break;
+        case "OTHERS":divTag1.setAttribute("style","background:url('/MYBAZAAR/static/images/OTHERS.png')");
+        				break;
+        case "SOFTWARES":divTag1.setAttribute("style","background:url('/MYBAZAAR/static/images/SOFTWARES.png')");
+        				break;
+        default:divTag1.setAttribute("style","background:url('/MYBAZAAR/static/images/logo.png')");
+        				break;
+    }
+	document.getElementById("Maindiv").appendChild(divTag1);
+}
+     //for item_name
+function createDiv2(a){
+	var divTag2 = document.createElement("div");
+	divTag2.id = "div2";
+	divTag2.innerHTML = a;
+	document.getElementById("Maindiv").appendChild(divTag2);
+}
+
+     //for description
+function createDiv3(a){
+	var divTag3= document.createElement("div");
+	divTag3.id = "div3";
+    divTag3.innerHTML = "Description: "+a;
+	document.getElementById("Maindiv").appendChild(divTag3);
+}
+
+
+     //for email_id
+function createDiv4(a){
+	var divTag4= document.createElement("div");
+	divTag4.id = "div4";
+    divTag4.innerHTML ="Email id: "+ a;
+	document.getElementById("Maindiv").appendChild(divTag4);
+}
+
+
+     //for price
+function createDiv7(a){
+	var divTag7= document.createElement("div");
+	divTag7.id = "div7";
+    divTag7.innerHTML ="Price: Rs."+a;
+	document.getElementById("Maindiv").appendChild(divTag7);
+}
+ 
+     //for phone_no.
+function createDiv5(a){
+	var divTag5= document.createElement("div");
+	divTag5.id = "div5";
+    divTag5.innerHTML ="Contact no.: "+ a;
+	document.getElementById("Maindiv").appendChild(divTag5);
+}
+
+//for purpose
+function createDiv8(a){
+	var divTag8= document.createElement("div");
+	divTag8.id = "div8";
+    divTag8.innerHTML ="Purpose.: "+ a;
+	document.getElementById("Maindiv").appendChild(divTag8);
+}
+
+     //for oreder button
+function createDiv9(cat,subcat,item){
+	var divTag9=document.createElement("button");
+    divTag9.id = "div9";
+    document.getElementById("Maindiv").appendChild(divTag9);
+    divTag9.innerHTML ="Place order";
+    divTag9.onclick=function()
+        { 
+    	clear();
+    	createMainDiv();
+    	var divTag10=document.createElement("input");
+    	divTag10.id = "div10";
+        divTag10.placeholder="NAME:"
+        document.getElementById("Maindiv").appendChild(divTag10);
+    	
+    	var divTag11=document.createElement("input");
+    	divTag11.id = "div11";
+    	divTag11.placeholder="EMAIL ID:"
+    	document.getElementById("Maindiv").appendChild(divTag11);
+    	
+    	var divTag12=document.createElement("input");
+    	divTag12.id = "div12";
+    	divTag12.placeholder="PHONE NUMBER:"
+    	document.getElementById("Maindiv").appendChild(divTag12);
+    	
+    	var divTag13=document.createElement("button");
+    	divTag13.innerHTML ="Place order";
+    	divTag13.id = "div13";
+        document.getElementById("Maindiv").appendChild(divTag13);
+        divTag13.onclick=function() 
+        {
+      		var name=document.getElementById("div10").value;
+    		var email=document.getElementById("div11").value;
+            var phone_no=document.getElementById("div12").value;
+            var category=cat;
+            var sub_category=subcat;
+            var item_name=item;
+            if(document.getElementById("div10").value=='')
+            {
+            	alert("Name is mandatory feild");
+            	return;
+            }
+            if(document.getElementById("div11").value=='')
+            {
+            	alert("Email id is mandatory feild");
+            	return;
+            }
+            var text=category+"#"+sub_category+"#"+item_name+"#"+name+"#"+email+"#"+phone_no;
+            var xmlhttp;
+			if (window.XMLHttpRequest)
+  			{// code for IE7+, Firefox, Chrome, Opera, Safari
+  					xmlhttp=new XMLHttpRequest();
+  			}
+			else
+  			{// code for IE6, IE5
+  					xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  			} 
+    		xmlhttp.open("POST","{{=URL('insert_order')}}",true);
+    		xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+			xmlhttp.setRequestHeader("Content-length", text.length);
+			xmlhttp.onreadystatechange=function()
+  			{
+  				if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    			{   
+           			 alert("ORDER PLACED");
+           			 window.location="{{=URL('index')}}";
+
+    			}
+            }
+			xmlhttp.send(text);
+		};	
+	};
+}
+
+
+
+
+//to clear the main div
+function clear(){
+		var div = document.getElementById('Maindiv');
+    	if(div)
+        {
+        	div.parentNode.removeChild(div);
+    	}
+    	var div = document.getElementById('Maindiv2');
+    	if(div)
+        {
+        	div.parentNode.removeChild(div);
+    	}
+}
+     
+function search_element(cat,sub_cat)
+{
+    clear();
+    var text;
+    if(cat=='')
+    {
+    	 text=document.getElementById("search_text").value;
+    	if(text=='')
+        {
+        	alert("Enter some text to be searched!");
+        	default_page();
+        	return;
+        }
+    }
+    else
+    {
+    	text=cat + "#" + sub_cat;
+    }
+	var xmlhttp;
+	if (window.XMLHttpRequest)
+  	{// code for IE7+, Firefox, Chrome, Opera, Safari
+  		xmlhttp=new XMLHttpRequest();
+  	}
+	else
+  	{// code for IE6, IE5
+  		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  	}
+  	if(cat=='')
+    {
+        xmlhttp.open("POST","{{=URL('search1')}}",true);//search the text typed in the search bar
+    }
+  	else
+    { 
+        xmlhttp.open("POST","{{=URL('search2')}}",true);//search for the category and sub category provided
+  	}
+	xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	xmlhttp.setRequestHeader("Content-length", text.length);
+	xmlhttp.onreadystatechange=function()
+  	{
+  		if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    	{   
+    	 	var result=xmlhttp.responseText;
+    	 	if(result=='')
+            {
+            	createMainDiv();
+            	createDiv0();
+            }
+            else
+            {
+    	 		var row=result.split("\n");
+     			for (i=0;i<row.length-1;i++)
+         		{
+         			var j=row[i].split("\t");
+          			createMainDiv();
+          			createDiv1(j[4]);
+         			createDiv2(j[6]);
+         			createDiv3(j[7]);
+         			createDiv8(j[9]);
+         			createDiv7(j[8]);
+         			createDiv4(j[2]);
+         			createDiv5(j[3]);
+                   createDiv9(j[4],j[5],j[6]);
+    	 		}
+        	}
+
+    	}
+	}
+    document.getElementById("search_text").value='';
+	xmlhttp.send(text);
+}
+
+window.onload=function(){
+       default_page();
+       };
+   
+//to clear the main div 
+        function default_page()
+        { 
+        clear();
+    	var xmlhttp;
+		if (window.XMLHttpRequest)
+  		{// code for IE7+, Firefox, Chrome, Opera, Safari
+  			xmlhttp=new XMLHttpRequest();
+  		}
+		else
+  		{// code for IE6, IE5
+  			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  		}
+  		xmlhttp.open("POST","{{=URL('recent_posts')}}",true);//displays the recent posts
+  		xmlhttp.send();
+		xmlhttp.onreadystatechange=function()
+  		{	
+  			if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    		{   
+    	 		var result=xmlhttp.responseText;
+                if(result=='')
+            	{
+            		createMainDiv();
+            		createDiv0();
+            	}
+            	else
+            	{
+    	 			var row=result.split("\n");
+     				for (i=0;i<row.length-1;i++)
+         			{
+         				var j=row[i].split("\t");
+          				createMainDiv();
+          				createDiv1(j[4]);
+         				createDiv2(j[6]);
+         				createDiv3(j[7]);
+         				createDiv8(j[9]);
+         				createDiv7(j[8]);
+         				createDiv4(j[2]);
+         				createDiv5(j[3]);
+                        createDiv9(j[4],j[5],j[6]);
+         				
+    	 			}
+				}
+    		}
+		}
+    }
+
+</script>
+    
+    
+ <script type="text/javascript">
+ 
+ 
+function redirect_profile()
+{
+	var xmlhttp;
+	var uid='';
+	if (window.XMLHttpRequest)
+  	{// code for IE7+, Firefox, Chrome, Opera, Safari
+  		xmlhttp=new XMLHttpRequest();
+  	}
+	else
+  	{// code for IE6, IE5
+  		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  	}
+  	
+	xmlhttp.open("POST","{{=URL('fetch_uid')}}",true);
+
+  	xmlhttp.onreadystatechange=function()
+    {
+    	if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    	{
+			var uid=xmlhttp.responseText;
+			if(uid=='None')
+        	{
+            	window.location="{{=URL('user')}}";
+       		}
+        	else
+        	{   clear2();
+        		var xmlhttp1;
+				if (window.XMLHttpRequest)
+  				{// code for IE7+, Firefox, Chrome, Opera, Safari
+  					xmlhttp1=new XMLHttpRequest();
+  				}
+				else
+  				{// code for IE6, IE5
+  					xmlhttp1=new ActiveXObject("Microsoft.XMLHTTP");
+  				}
+        		xmlhttp1.open("POST","{{=URL('profile')}}",true);
+				xmlhttp1.onreadystatechange=function()
+  				{ 
+  					if (xmlhttp1.readyState==4 && xmlhttp1.status==200)
+    				{   
+    	 				var result=xmlhttp1.responseText;
+    	 				if(result=='')
+            			{
+            				createMainDiv2();
+            				createDiv14();
+                    	}
+            			else
+            			{
+            				createMainDiv2();
+            				createDiv21();
+    	 					var row=result.split("\n");
+     						for (i=row.length-2;i>=0;i--)
+         					{
+                                createDiv22(row.length-i-1);
+         						var j=row[i].split("\t");
+          						createDiv15(j[0]);
+          						createDiv16(j[1]);
+          						createDiv17(j[2]);
+          						createDiv18(j[3]);
+          						createDiv19(j[4]);
+          						createDiv20(j[5]);
+    	 					}
+        				}
+	
+    				}
+				};
+        		xmlhttp1.send();
+        	}
+    	}
+	};
+	xmlhttp.send();
+}
+
+        
+        
+//to clear the main div
+function clear2(){
+		var div = document.getElementById("Maindiv");
+    	if(div)
+        {
+        	div.parentNode.removeChild(div);
+    	}
+    	var div = document.getElementById("Maindiv2");
+    	if(div)
+        {
+        	div.parentNode.removeChild(div);
+    	}
+}
+        
+function createMainDiv2(){
+     var MainDivTag2 = document.createElement("div");
+     MainDivTag2.id = "Maindiv2";
+     document.getElementById("main_page").appendChild(MainDivTag2);
+}
+ 
+function createDiv14(){
+	var divTag14= document.createElement("div");
+	divTag14.id = "div14";
+    divTag14.innerHTML ="YOU DONT HAVE ANY ORDER AGAINST ANY OF YOUR PRODUCTS";
+	document.getElementById("Maindiv2").appendChild(divTag14);
+}  
+        
+     //for category
+function createDiv15(a){
+	var divTag15= document.createElement("div");
+	divTag15.id = "div15";
+    divTag15.innerHTML ="Category.:"+ a;
+	document.getElementById("Maindiv2").appendChild(divTag15);
+}
+        
+     //for sub category
+function createDiv16(a){
+	var divTag16= document.createElement("div");
+	divTag16.id = "div16";
+    divTag16.innerHTML ="Sub Category.:"+ a;
+	document.getElementById("Maindiv2").appendChild(divTag16);
+}
+        
+     //for Item Name.
+function createDiv17(a){
+	var divTag17= document.createElement("div");
+	divTag17.id = "div17";
+    divTag17.innerHTML ="Item Name.:"+ a;
+	document.getElementById("Maindiv2").appendChild(divTag17);
+}
+     
+     //for Buyer Name
+function createDiv18(a){
+	var divTag18= document.createElement("div");
+	divTag18.id = "div18";
+    divTag18.innerHTML ="Buyer Name.:"+ a;
+	document.getElementById("Maindiv2").appendChild(divTag18);
+}
+
+     //for Buyer email id
+function createDiv19(a){
+	var divTag19= document.createElement("div");
+	divTag19.id = "div19";
+    divTag19.innerHTML ="Buyer email id.:"+ a;
+	document.getElementById("Maindiv2").appendChild(divTag19);
+}
+
+//for Buyer Phone no.
+function createDiv20(a){
+	var divTag20= document.createElement("div");
+	divTag20.id = "div20";
+    divTag20.innerHTML ="Buyer Phone no..:"+ a;
+	document.getElementById("Maindiv2").appendChild(divTag20);
+}
+
+//for main heading
+function createDiv21(){
+	var divTag21= document.createElement("div");
+	divTag21.id = "div21";
+    divTag21.innerHTML ="ORDERS REGARDING YOUR PRODUCTS:";
+	document.getElementById("Maindiv2").appendChild(divTag21);
+}
+
+//for ORDER NO
+function createDiv22(a){
+	var divTag22= document.createElement("div");
+	divTag22.id = "div22";
+    divTag22.innerHTML ="Order no. "+a;
+	document.getElementById("Maindiv2").appendChild(divTag22);
+}
+
+
+</script>
+    
+  <script type="text/javascript" src="{{=URL(r=request,c='static',f='jquery.js')}}"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function(){
+        hide();
+    });
+
+    function getData(value)
+   {
+    	if(value != "")
+        {
+            $("#ajaxresults").show();
+            $.post("{{=URL(r=request,f='ajaxlivesearch')}}",{partialstr:value},function(result)
+                {
+                	$("#ajaxresults").html(result);
+            	});
+        }
+        else
+        {
+            hide();
+        }
+   }
+
+   function hide()
+   {
+        $("#ajaxresults").hide();
+   }
+
+   function copyToBox(value)
+   {
+        $("#search_text").val(value);
+        hide();
+   }  
+</script>
+   
+   <script type="text/javascript">
+     
+     
+     function redirect_post_ad()
+{
+	var xmlhttp;
+	var uid='';
+	if (window.XMLHttpRequest)
+  	{// code for IE7+, Firefox, Chrome, Opera, Safari
+  		xmlhttp=new XMLHttpRequest();
+  	}
+	else
+  	{// code for IE6, IE5
+  		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  	}
+  	
+	xmlhttp.open("POST","{{=URL('fetch_uid')}}",true);
+	xmlhttp.onreadystatechange=function()
+    {
+    if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+		var uid=xmlhttp.responseText;
+		if(uid=='None')
+        {
+            window.location="{{=URL('user')}}";
+        }
+        else
+        {
+        	window.location="{{=URL('post_ad')}}";
+        }
+    }
+}
+xmlhttp.send();
+}
+  
+    
+    </script>
+<div id="logo" style="background:url('/MYBAZAAR/static/images/logo.png')">
+	</div>
+	<form class="search_form cf">
+        <input type="text" id="search_text" name="search_text" placeholder="Search here..."  autocomplete="off" onkeyup="getData(this.value);" />
+        <div id="ajaxresults"></div>
+        <button type="submit" onclick="search_element('','')">Search</button>
+	</form>
+	<div class="post_ad">
+        <button id="buttonid1" type="submit" onclick="redirect_post_ad()">POST AD</button>
+	</div>
+	<div class="profile">
+        <button id="buttonid2" type="submit" onclick="redirect_profile()">PROFILE</button>
+	</div>
+	<div id="menu_bar">
+		<ul id="coolMenu">
+    			
+			<li>
+			<li>
+        		<a href="#">OTHERS</a>
+        			<ul>
+                        	<li><button onclick="search_element('OTHERS','ACCESSORIES')">ACCESSORIES</button></li>
+            				<li><button onclick="search_element('OTHERS','CLOTHING')">CLOTHING</button></li>
+            				<li><button onclick="search_element('OTHERS','SHOES')">SHOES</button></li>
+                            <li><button onclick="search_element('OTHERS','WATCHES')">WATCHES</button></li>
+                            <li><button onclick="search_element('OTHERS','OTHERS')">OTHERS</button></li>
+        			</ul>
+			</li>
+			
+			
+			
+                        <li>
+        		<a href="#">VEHICLES</a>
+        			<ul>
+                			<li><button onclick="search_element('VEHICLES','BI CYCLES')">BI CYCLES</button></li>
+            				<li><button onclick="search_element('VEHICLES','CARS')">CARS</button></li>
+            				<li><button onclick="search_element('VEHICLES','BIKES')">BIKES</button></li>
+							<li><button onclick="search_element('VEHICLES','SPARE PARTS')">SPARE PARTS</button></li>
+        		</ul>
+		     </li>
+                        <li>
+        		<a href="#">SOFTWARES</a>
+				<ul>
+                			<li><button onclick="search_element('SOFTWARES','OPERATING SYSTEMS')">OPERATING SYSTEMS</button></li>
+            				<li><button onclick="search_element('SOFTWARES','APPLICATION PROGRAMS')">APPLICATION PROGRAMS</button></li>
+            				<li><button onclick="search_element('SOFTWARES','ANTIVIRUS')">ANTIVIRUS</button></li>
+        			</ul>
+			</li>
+                       <li>
+        		<a href="#">ELECTRONICS</a>
+        			<ul>
+                			<li><button onclick="search_element('ELECTRONICS','COMPUTER PERIPHRALS')">COMPUTER PERIPHRALS</button></li>
+            				<li><button onclick="search_element('ELECTRONICS','LAPTOPS')">LAPTOPS</button></li>
+							<li><button onclick="search_element('ELECTRONICS','CAMERA')">CAMERA</button></li>
+            				<li><button onclick="search_element('ELECTRONICS','CELL PHONE')">CELL PHONES</button></li>
+        			</ul>
+	
+			</li>
+			
+			<li>
+        		<a href="#">STUDY MATERIALS</a>
+        			<ul>
+                			<li><button onclick="search_element('STUDY MATERIALS','UNDER GRADUATE')">UNDER GRADUATE</button></li>
+            				<li><button onclick="search_element('STUDY MATERIALS','POST GRADUATE')">POST GRADUATE</button></li>
+            				<li><button onclick="search_element('STUDY MATERIALS','PhD')">PhD</button></li>
+                      
+        			</ul>
+			</li>
+
+                      <li>
+        		<a href="#">BOOKS</a>
+				<ul>
+                			<li><button onclick="search_element('BOOKS','REFERENCE BOOKS')">REFFRENCE BOOKS</button></li>
+            				<li><button onclick="search_element('BOOKS','MAGZINES')">MAGZINES</button></li>
+							<li><button onclick="search_element('BOOKS','FICTION')">FICTION</button></li>
+							<li><button onclick="search_element('BOOKS','NON FICTION')">NON FICTION</button></li>
+        		</ul>
+			</li>
+			<li>
+        		<a href="#" onclick="default_page()" >HOME</a>
+			</li>
+			</ul>
+	</div>
+
+
+<div id="main_page">
+</div>
+<style>
+/*-----------submit button-----*/
+    
+    body{margin:40px 0 0 0;
+        background:#ECF2F5;
+        font: 13px 'Lucida sans', Arial, Helvetica;
+        color: #eee;
+        text-align: center;
+    }
+    
+    /*---auto complete---*/
+    #ajaxresults{
+        background: #ffffff;
+        padding: 5px 10px;
+        max-height: 400px;
+        overflow: auto;
+        position: absolute;
+        z-index: 99;
+        border: 1px solid #A9A9A9;
+        border-width: 0 1px 1px 1px;
+        -webkit-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+        -moz-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+        -box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+        margin:40px 0 0 0;
+        text-align:left;
+        text-transform:uppercase;
+    }
+    #ajaxresults a{
+        color:#666666;
+    }
+    /*------dynamic div-----*/
+    div#main_page{
+	 	height: auto !important;
+    	overflow:auto;
+    	min-height:300px;
+        /*height: 700px;*/
+		width:950px;
+		margin:150px 0 0 100px;
+        background:#D1E8F8
+
+      }
+      
+    div#Maindiv{
+       height: auto ;
+    }
+      
+	div#div0{
+    font-weight:normal;
+    text-transform:uppercase;
+    color:black;
+    letter-spacing:1pt;
+    word-spacing:2pt;
+    font-size:15px;
+    text-align:center;
+    font-family:arial, helvetica, sans-serif;
+    line-height:1;
+    margin:10px 0px 0 20px;
+    float:left;
+    }
+    
+    div#div1{
+        vertical-align: left; 
+        background-repeat: no-repeat; 
+        float:left;
+        margin:50px 0 0 40px;
+        min-height:90px;
+        min-width:90px;
+    }
+    div#div2{
+    font-weight:normal;
+    text-transform:uppercase;
+    color:#01395F;
+    letter-spacing:1pt;
+    word-spacing:2pt;
+    font-size:30px;
+    text-align:left;
+    font-family:Arial Verdana;
+    line-height:1;
+    text-decoration:underline;
+    margin:20px 0px 0 80px;
+    width:550px;
+    }
+    
+    div#div3{
+	font-style:normal;
+	font-family:arial;
+	text-transform:Capitalize;
+    font-size:15px;
+    text-align:left;
+    margin:10px 0 0 150px;
+    min-height:10px;
+    color:#0060A0;
+    width:500px;
+    height: auto;
+    overflow:hidden;
+    }
+    
+    div#div7{
+  font-style:normal;
+	font-family:arial;
+	text-transform:Capitalize;
+    text-align:left;
+    font-size:15px;
+    text-align:left;
+    margin:10px 00px 0 150px;
+     width:500px;
+     color:#0060A0;
+   
+    }
+    
+    div#div4{
+   font-style:normal;
+	font-family:arial;
+	text-transform:Capitalize;
+    text-align:left;
+    font-size:15px;
+    text-align:left;
+    margin:10px 00px 0 150px;
+     width:500px;
+     color:#0060A0;
+    
+    }
+    
+    div#div5{
+   font-style:normal;
+	font-family:arial;
+	text-transform:Capitalize;
+    text-align:left;
+    font-size:15px;
+    text-align:left;
+    margin:10px 00px 0 150px;
+     width:500px;
+     color:#0060A0;
+    }
+    
+    div#div8{
+	font-style:normal;
+	font-family:arial;
+	text-transform:Capitalize;
+    text-align:left;
+    font-size:15px;
+    text-align:left;
+    margin:10px 00px 0 150px;
+     width:500px;
+     color:#0060A0;
+    }
+    
+    button#div9{
+    margin:10px 00px 0 150px;
+    cursor: pointer;
+    height: 30px;
+    width: 110px;
+    font: bold 10px/20px 'lucida sans', 'trebuchet MS', 'Tahoma';
+    color: #fff;
+    text-transform: uppercase;
+    background: #0060A0;
+   -moz-border-radius:80;
+    -webkit-border-radius:10;
+    border-radius: 10;      
+    Text-shadow: 0 -1px 0 rgba(0, 0 ,0, .3);
+    }
+    
+    input#div10{
+    margin:30px 00px 0 10px;
+    height:25px;
+    font: 15px/25px 'lucida sans', 'trebuchet MS', 'Tahoma';
+    color: black;
+    text-transform: uppercase;
+    background: white;
+   -moz-border-radius:80;
+    -webkit-border-radius:10;
+    border-radius: 10;      
+    Text-shadow: 0 -1px 0 rgba(0, 0 ,0, .3);
+  
+    }
+    
+    input#div11{
+    margin:30px 00px 0 10px;
+    height:25px;
+    font: 15px/25px 'lucida sans', 'trebuchet MS', 'Tahoma';
+    color: black;
+    text-transform: uppercase;
+    background: white;
+   -moz-border-radius:80;
+    -webkit-border-radius:10;
+    border-radius: 10;
+    
+    }
+    
+    input#div12{
+    margin:30px 00px 0 10px;
+    height:25px;
+    font: 15px/25px 'lucida sans', 'trebuchet MS', 'Tahoma';
+    color: black;
+    text-transform: uppercase;
+    background: white;
+   -moz-border-radius:80;
+    -webkit-border-radius:10;
+    border-radius: 10;      
+    Text-shadow: 0 -1px 0 rgba(0, 0 ,0, .3);
+    
+    }
+    
+    button#div13{
+    margin:40px 00px 0 400px;
+    cursor: pointer;
+    height: 30px;
+    width: 110px;
+    font: bold 10px/20px 'lucida sans', 'trebuchet MS', 'Tahoma';
+    color: #fff;
+    text-transform: uppercase;
+    background: #0060A0;
+   -moz-border-radius:80;
+    -webkit-border-radius:10;
+    border-radius: 10;      
+    Text-shadow: 0 -1px 0 rgba(0, 0 ,0, .3);
+    }
+    div#div14{
+    font-weight:normal;
+    text-transform:uppercase;
+    color:black;
+    letter-spacing:1pt;
+    word-spacing:2pt;
+    font-size:15px;
+    text-align:center;
+    font-family:arial, helvetica, sans-serif;
+    line-height:1;
+    margin:10px 0px 0 20px;
+    float:left;
+    }
+    
+    div#div15{
+  font-family:RokkittRegular;
+	font-style:normal;
+	font-weight:200px;
+	font-size:12px;
+	text-transform:Capitalize;
+    text-align:left;
+    font-size:15px;
+    text-align:left;
+    margin:10px 00px 0 150px;
+     width:500px;
+     color:#0060A0;
+    }
+    
+    div#div16{
+   font-family:RokkittRegular;
+	font-style:normal;
+	font-weight:200px;
+	font-size:12px;
+	text-transform:Capitalize;
+    text-align:left;
+    font-size:15px;
+    text-align:left;
+    margin:10px 00px 0 150px;
+     width:500px;
+     color:#0060A0;
+    }
+    
+    div#div17{
+   font-family:RokkittRegular;
+	font-style:normal;
+	font-weight:200px;
+	font-size:12px;
+	text-transform:Capitalize;
+    text-align:left;
+    font-size:15px;
+    text-align:left;
+    margin:10px 00px 0 150px;
+     width:500px;
+     color:#0060A0;
+    }
+    
+    div#div18{
+   font-family:RokkittRegular;
+	font-style:normal;
+	font-weight:200px;
+	font-size:12px;
+	text-transform:Capitalize;
+    text-align:left;
+    font-size:15px;
+    text-align:left;
+    margin:10px 00px 0 150px;
+     width:500px;
+     color:#0060A0;
+    }
+    
+    div#div19{
+   font-family:RokkittRegular;
+	font-style:normal;
+	font-weight:200px;
+	font-size:12px;
+	text-transform:Capitalize;
+    text-align:left;
+    font-size:15px;
+    text-align:left;
+    margin:10px 00px 0 150px;
+     width:500px;
+     color:#0060A0;
+    }
+    
+    div#div20{
+    font-family:RokkittRegular;
+	font-style:normal;
+	font-weight:200px;
+	font-size:12px;
+	text-transform:Capitalize;
+    text-align:left;
+    font-size:15px;
+    text-align:left;
+    margin:10px 00px 0 150px;
+     width:500px;
+     color:#0060A0;
+    }
+    
+    div#div21{
+    font-weight:normal;
+    text-transform:uppercase;
+    color:#01395F;
+    letter-spacing:1pt;
+    word-spacing:2pt;
+    font-size:22px;
+    text-align:center;
+    font-family:Arial Verdana;
+    line-height:1;
+    text-decoration:underline;
+    margin:20px 0px 0 80px;
+    width:850px;
+    }
+    div#div22{
+    font-weight:normal;
+    text-transform:uppercase;
+    color:#01395F;
+    letter-spacing:1pt;
+    word-spacing:2pt;
+    font-size:18px;
+    text-align:left;
+    font-family:Arial Verdana;
+    line-height:1;
+    text-decoration:underline;
+    margin:20px 0px 0 80px;
+    width:550px;
+    }
+    /*-----end----*/
+    div#logo{
+	margin:0px 0 0 2px;
+    height:60px;
+	padding:50px 0 0;
+	position:absolute;
+	width:130px;
+	
+    }
+    
+    
+    /*--------------for clear-----------------*/
+    
+     .cf:before, .cf:after{
+      content:"";
+      display:table;
+    }
+    
+    .cf:after{
+      clear:both;
+    }
+
+    .cf{
+      zoom:1;
+    }
+
+    /*-------------in the form------------------*/	
+    
+    .search_form {
+        width: 460px;
+        padding: 15px;
+        margin: 0px 0 0 250px;
+        background: #01395F;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+        -moz-box-shadow: 0 1px 1px rgba(0,0,0,.4) inset, 0 1px 0 rgba(255,255,255,.2);
+        -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.4) inset, 0 1px 0 rgba(255,255,255,.2);
+        box-shadow: 0 1px 1px rgba(0,0,0,.4) inset, 0 1px 0 rgba(255,255,255,.2);
+    }
+    
+    .search_form input {
+        width: 330px;
+        height: 20px;
+        padding: 10px 5px;
+        float: left;    
+        font: bold 15px 'lucida sans', 'trebuchet MS', 'Tahoma';
+        border: 0;
+        background: #ECF2F5;
+        -moz-border-radius: 3px 0 0 3px;
+        -webkit-border-radius: 3px 0 0 3px;
+        border-radius: 3px 0 0 3px;   
+        text-transform:uppercase;   
+    }
+    
+    .search_form input:focus {
+        outline: 0;
+        background: white;
+        -moz-box-shadow: 0 0 2px rgba(0,0,0,.8) inset;
+        -webkit-box-shadow: 0 0 2px rgba(0,0,0,.8) inset;
+        box-shadow: 0 0 2px rgba(0,0,0,.8) inset;
+    }
+    
+    .form-wrapper input::-webkit-input-placeholder {
+       color: #999;
+       font-weight: normal;
+       font-style: italic;
+    }
+    
+    .search_form input:-moz-placeholder {
+        color: #999;
+        font-weight: normal;
+        font-style: italic;
+    }
+    
+    .search_form input:-ms-input-placeholder {
+        color: #999;
+        font-weight: normal;
+        font-style: italic;
+    }    
+    
+    .search_form button{
+		overflow: visible;
+        position: relative;
+        float: right;
+        border: 0;
+        padding: 0;
+        cursor: pointer;
+        height: 40px;
+        width: 110px;
+        font: bold 15px/40px 'lucida sans', 'trebuchet MS', 'Tahoma';
+        color: #fff;
+        text-transform: uppercase;
+        background:#0060A0;
+        -moz-border-radius: 0 3px 3px 0;
+        -webkit-border-radius: 0 3px 3px 0;
+        border-radius: 0 3px 3px 0;
+        text-shadow: 0 -1px 0 #0060A0;
+    }   
+      
+    .search_form button:hover{		
+        background: #0060A0
+    }	
+      
+    .search_form button:active,
+    .search_form button:focus{   
+        background: #0060A0;    
+    }
+    
+    .search_form button:before {
+        content: '';
+        position: absolute;
+        border-width: 8px 8px 8px 0;
+        border-style: solid solid solid none;
+        border-color: transparent #0060A0 transparent;
+        top: 12px;
+        left: -6px;
+    }
+    
+    .search_form button:hover:before{
+        border-right-color: #0060A0;
+    }
+    
+    .search_form button:focus:before{
+        border-right-color: #0060A0;
+    }    
+    
+    .search_form button::-moz-focus-inner {
+        border: 0;
+        padding: 0;
+    }
+/*----*/
+    
+    .post_ad button {
+		overflow: visible;
+		margin:0 70px 0 0;
+        float: right;
+        border: 0;
+        padding: 0;
+        cursor: pointer;
+        height: 40px;
+        width: 110px;
+        font: bold 15px/40px 'lucida sans', 'trebuchet MS', 'Tahoma';
+        color: #fff;
+        text-transform: uppercase;
+        background: #0060A0;
+        -moz-border-radius:10;
+        -webkit-border-radius:10;
+        border-radius: 10;      
+        text-shadow: 0 -1px 0 rgba(0, 0 ,0, .3);
+    }   
+      
+    .post_ad button:hover{		
+        background: #0060A0;
+    }	
+      
+    .post_ad button:active,
+    .post_ad button:focus{   
+        background: #0060A0;    
+    }
+    
+    .post_ad button:before {
+        content: '';
+        border-width: 8px 8px 8px 0;
+        border-style: solid solid solid none;
+        border-color: transparent #0060A0 transparent;
+        top: 12px;
+        left: -6px;
+    }
+    
+    .post_ad button:hover:before{
+        border-right-color: #0060A0;
+    }
+    
+    .post_ad button:focus:before{
+        border-right-color: #0060A0;
+    }    
+    
+    .post_ad button::-moz-focus-inner {
+        border: 0;
+        padding: 0;
+    }
+    
+    
+    
+    
+    .profile button {
+		overflow: visible;
+		margin:0 70px 0 0;
+        float: right;
+        border: 0;
+        padding: 0;
+        cursor: pointer;
+        height: 40px;
+        width: 110px;
+        font: bold 15px/40px 'lucida sans', 'trebuchet MS', 'Tahoma';
+        color: #fff;
+        text-transform: uppercase;
+        background: #0060A0;
+        -moz-border-radius:10;
+        -webkit-border-radius:10;
+        border-radius: 10;      
+        text-shadow: 0 -1px 0 rgba(0, 0 ,0, .3);
+    }   
+      
+    .profile button:hover{		
+        background: #0060A0;
+    }	
+      
+    .profile button:active,
+    .profile button:focus{   
+        background: #0060A0;    
+    }
+    
+    .profile button:before {
+        content: '';
+        border-width: 8px 8px 8px 0;
+        border-style: solid solid solid none;
+        border-color: transparent #0060A0 transparent;
+        top: 12px;
+        left: -6px;
+    }
+    
+    .profile button:hover:before{
+        border-right-color: #0060A0;
+    }
+    
+    .profile button:focus:before{
+        border-right-color: #0060A0;
+    }    
+    
+    .profile button::-moz-focus-inner {
+        border: 0;
+        padding: 0;
+    }
+/*--------end-------------*/
+	#coolMenu,
+	#coolMenu ul {
+    		list-style: none;
+	}
+	#coolMenu {
+    		float: right;
+    		margin:40px 80px 0 0;
+    
+	}
+	#coolMenu > li {
+		float: right;
+	}
+	#coolMenu li a {
+		display: block;
+    		height: 4em;
+    		line-height: 3em;
+    		padding:2 2em;
+    		text-decoration: none;
+    		width:150px;
+    		border-radius: 2px;
+	}
+	#coolMenu ul {
+    		position: absolute;
+    		display: none;
+    		z-index: 999;
+	}
+	#coolMenu ul li a {
+   		width: 350px;
+	}
+	#coolMenu li:hover ul {
+    	display: block;
+	}
+
+/* Main menu
+------------------------------------------*/
+	#coolMenu {
+    		font-family: Arial;
+    		font-size: 12px;
+    		background: #01395F
+	}
+	#coolMenu > li > a {
+    		color: white;
+    		font-weight: bold;
+	}
+	#coolMenu > li:hover > a {
+   		 background: #fff;
+    		color: #000;
+		}
+ 
+/* Submenu
+------------------------------------------*/
+	#coolMenu ul {
+    		background:black;
+	}
+	#coolMenu ul li button {
+    		color: white;
+        	width:170px;
+        	height:3em;
+        	background:black;
+        	moz-border-radius: 0px;
+			-webkit-border-radius: 0px;
+			border-radius: 0px;
+	}
+	#coolMenu ul li:hover button {
+    		background:#0060A0;
+	}
+</style>
+
+</html>

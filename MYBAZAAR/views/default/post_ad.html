@@ -1,0 +1,202 @@
+<script type="text/javascript">
+    function insert_element()
+	{	
+        var required=['CATEGORY','SUB_CATEGORY','ITEM_NAME','DESCRIPTION','EMAIL_ID'];
+		var bool=true;
+		for(var i=0;i<required.length;i++)
+	    {
+    		if(document.getElementById(required[i]).value=="" || document.getElementById(required[i]).value=="Make a selection" )
+			{
+					alert(required[i]+' is mandatry field!!');
+					bool=false;
+			}
+        }
+        if(bool==false)
+        {
+        	return bool;
+        }
+        var text1=document.getElementById("PHONE_NUMBER").value;
+ 		var text2=document.getElementById("EMAIL_ID").value;
+ 		var text3=document.getElementById("CATEGORY").value;
+ 		var text4=document.getElementById("SUB_CATEGORY").value;
+ 		var text5=document.getElementById("ITEM_NAME").value;
+ 		var text6=document.getElementById("DESCRIPTION").value;
+ 		var text7=document.getElementById("PRICE").value;
+ 		var text8=document.getElementById("PURPOSE").value;
+        if (isNaN(text1) || text1.length!=10)
+    	{
+    		alert("Please give a valid Phone number");
+    		return ;
+  		}
+        var atpos=text2.indexOf("@");
+		var dotpos=text2.lastIndexOf(".");
+		if (atpos<1 || dotpos<atpos+2 || dotpos+2>=text2.length)
+  		{
+  			alert("Not a valid e-mail address");
+  			return;
+  		}
+        if (isNaN(text7))
+    	{
+    		alert("Please give a valid Price");
+    		return ;
+  		}
+        else
+        {
+ 			window.location.href="{{=URL('insert_post')}}?text1="+text1+"&text2="+text2+"&text3="+text3+"&text4="+text4+"&text5="+text5+"&text6="+text6+"&text7="+text7+"&text8="+text8;
+    	}
+    }
+  
+</script>
+
+
+<script type="text/javascript">
+	var categories = []; 
+	categories["startList"] = ["BOOKS","OTHERS","ELECTRONICS","STUDY MATERIALS","SOFTWARES","VEHICLES"]
+	categories["BOOKS"] = ["FICTION","NON FICTION","REFERENCE BOOKS","MAGZINES"];
+	categories["SOFTWARES"] = ["OPERATING SYSTEMS","APPLICATION PROGRAMS","ANTIVIRUS"];
+	categories["STUDY MATERIALS"] = ["UNDER GRADUATE","POST GRADUATE","PhD"];
+	categories["OTHERS"] = ["ACCESSORIES","CLOTHING","SHOES","WATCHES","OTHERS"];
+	categories["ELECTRONICS"] = ["COMPUTER PERIPHRALS","LAPTOPS","CAMERA","CELL PHONES"];
+	categories["VEHICLES"] = ["BI CYCLES","CARS","BIKES","SPARE PARTS"];
+	var nLists = 2; // number of lists in the set
+
+	function fillSelect(currCat,currList){
+		var step = Number(currList.name.replace(/\D/g,""));
+		for (i=step; i<nLists+1; i++) {
+			document.forms[0]['List'+i].length = 1;
+			document.forms[0]['List'+i].selectedIndex = 0;
+		}
+
+		var nCat = categories[currCat];
+		for (each in nCat) 	{
+			var nOption = document.createElement('option'); 
+			var nData = document.createTextNode(nCat[each]); 
+			nOption.setAttribute('value',nCat[each]); 
+			nOption.appendChild(nData); 
+			currList.appendChild(nOption); 
+
+		} 
+	}
+
+
+	function init() {
+		fillSelect('startList',document.forms[0]['List1'])
+	}
+
+	navigator.appName == "Microsoft Internet Explorer" ? attachEvent('onload', init, false) : addEventListener('load', init, false);	
+
+    
+
+</script>
+
+
+<body style="margin:40px 0 0 0;
+	background: #ECF2F5">
+	<div id="main_body">
+	<h1><center>Post Your Ad</center></h1><br>
+    <form action="" enctype="multipart/form-data" method="post">
+    	Select Your Category:<select name='List1'  id="CATEGORY" onchange="fillSelect(this.value,this.form['List2'])">
+    	<option selected>Make a selection</option>
+    	</select>
+    	&nbsp;
+
+    	Select Your Sub Category:<select name='List2' id="SUB_CATEGORY"  onchange="fillSelect(this.value,this.form['List3'])">
+    	<option selected>Make a selection</option>
+    	</select>
+    	&nbsp;
+        	<div><br><label>ITEM_NAME<input type="text" id="ITEM_NAME" maxlength="25"/></label> </div><br><br><br><br>
+			<div><label> DESCRIPTION <textarea  rows="3" cols="50" id="DESCRIPTION" maxlength="100" ></textarea></label></div> <br><br><br><br><br><br>
+        <div><label>PHONE_NO<input id="PHONE_NUMBER"  pattern="[0-9]{10}" maxlength="10" placeholder="max. 10 digits"/></label></div><br><br><br><br>
+        <div><label>EMAIL_ID<input type="email"  id="EMAIL_ID" placeholder="example@example.com"/></label></div> <br><br><br><br>
+        <div><label>PRICE<input type="number" id="PRICE" placeholder="in Rs."/> </label></div><br><br><br><br>
+        <div><label>PURPOSE<input type="text" id="PURPOSE" placeholder="Buy/Sell/Rent"/></label> </div><br><br><br><br>
+        <!--<div><label><input type="submit" id="FormButton" onclick=insert_element()/></label></div>-->
+          <div><label><submit id="FormButton" onclick=insert_element()>SUBMIT</submit></label></div>
+        <form/>
+    <div/>
+    <body/>
+
+<style>
+div#main_body{
+	height:1000px;
+	overflow:auto;
+	width:950px;
+	margin:15px 0 0 50px;
+	background: #D1E8F8;
+	color:#01395F;
+    font-style:bold;
+    
+    }
+
+form {
+	margin: 1em;
+}
+
+form input {
+	width: 30em;
+	height: 1.5em;
+	margin: 0 0 0.5em;
+	background-color:white;
+        color:#01395F;
+}
+
+form textarea {
+	overflow-y: scroll;
+	resize: vertical;
+	background-color:white;
+	font-size:1.3em;
+    font-style:bold;
+    
+}
+
+form label {
+	width: 10em;
+	height: 1em;
+	float: left;
+	color:#01395F;
+	font-size:1em;
+	font-style:bold;
+}
+
+submit#FormButton {
+	margin:40px 00px 0 400px;
+    cursor: pointer;
+    height: 35px;
+    width: 110px;
+    font: bold 15px/25px 'lucida sans', 'trebuchet MS', 'Tahoma';
+    color: #fff;
+    text-transform: uppercase;
+    background: #0060A0;    
+        padding:10px 10px;
+}
+
+.item_name {
+	width: 20em;
+	height: 3em;
+}
+    select#CATEGORY{
+       
+    cursor: pointer;
+    height: 25px;
+    width: 180px;
+    font: bold 13px/23px 'lucida sans', 'trebuchet MS', 'Tahoma';
+    color: #fff;
+    text-transform: uppercase;
+    background: #0060A0;  
+    Text-shadow: 0 -1px 0 rgba(0, 0 ,0, .3);
+    }
+    
+    
+    select#SUB_CATEGORY{
+       
+    cursor: pointer;
+    height: 25px;
+    width: 180px;
+    font: bold 13px/23px 'lucida sans', 'trebuchet MS', 'Tahoma';
+    color: #fff;
+    text-transform: uppercase;
+    background: #0060A0;  
+    Text-shadow: 0 -1px 0 rgba(0, 0 ,0, .3);
+    }
+</style>
+        <html/>
